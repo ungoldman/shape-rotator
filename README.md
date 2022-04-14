@@ -1,8 +1,8 @@
-# shape rotator
+# [SHAPE ROTATOR](ungoldman.github.io/shape-rotator/)
 
 Life getting you down?
 
-Calm your nerves with the soothing power of SHAPE ROTATOR.
+Calm your nerves with the soothing power of [SHAPE ROTATOR](ungoldman.github.io/shape-rotator/).
 
 ## License
 
