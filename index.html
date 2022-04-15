@@ -100,13 +100,29 @@
   <script defer src="https://unpkg.com/ripplet.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      document.querySelectorAll('.dice, .bulb').forEach(el => {
+      const bulb = document.querySelector('.bulb')
+      const dice = document.querySelector('.dice')
+      const ctrls = [bulb, dice]
+      const opts = () => ({
+        color: `rgb(${r(255)},${r(255)},${r(255)})`,
+        opacity: 0.25
+      })
+
+      // add ripple for pointerdown
+      ctrls.forEach(el => {
         el.addEventListener('pointerdown', event => {
-          ripplet(event, {
-            color: `rgb(${r(255)},${r(255)},${r(255)})`,
-            opacity: 0.25
-          })
+          ripplet(event, opts())
         })
+      })
+
+      // add ripple for keydown
+      document.addEventListener('keydown', event => {
+        if (event.key === 'q') {
+          ripplet({ currentTarget: dice }, { centered: true, ...opts() })
+        }
+        if (event.key === 'e') {
+          ripplet({ currentTarget: bulb }, { centered: true, ...opts() })
+        }
       })
     })
   </script>

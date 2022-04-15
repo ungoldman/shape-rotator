@@ -278,9 +278,6 @@ function controls () {
   let bg = window.localStorage.getItem('shape-rotator-bg')
 
   if (bg) h.classList.add(bg)
-
-  console.log(bg, dark)
-
   if (!bg && dark) bg = 'dark'
 
   function toggleLight () {
