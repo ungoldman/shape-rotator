@@ -302,8 +302,8 @@ function controls () {
     bg = 'dark'
   }
 
-  lightSwitch.addEventListener('click', toggleLight)
-  dice.addEventListener('click', reroll)
+  lightSwitch.addEventListener('pointerdown', toggleLight)
+  dice.addEventListener('pointerdown', reroll)
 
   const keys = {}
 
