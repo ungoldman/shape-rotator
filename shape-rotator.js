@@ -3,7 +3,8 @@
 // I mostly added pointer interactivity to allow the user to rotate,
 // then spent time fiddling with colors and composite ops.
 
-const CANCEL_EVENTS = ['pointerup', 'pointerout', 'pointerleave', 'pointercancel']
+// docs on composite operations:
+// https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalCompositeOperation
 const COMPOSITE_OPS = [
   'source-over',
   'source-in',
@@ -31,6 +32,13 @@ const COMPOSITE_OPS = [
   'saturation',
   'color',
   'luminosity'
+]
+
+const CANCEL_EVENTS = [
+  'pointerup',
+  'pointerout',
+  'pointerleave',
+  'pointercancel'
 ]
 
 class Point3D {
@@ -115,7 +123,6 @@ const cubeFaces = [
   [3, 2, 6, 7]
 ]
 
-
 function rollColors () {
   return Array(24).fill(0).map(_ => {
     return `rgba(${r(255)},${r(255)},${r(255)}, 0.9)`
@@ -141,13 +148,13 @@ function startRendering () {
   this.handleEvent(null)
 
   // prevent all touch events
+  // note: apparently you still need to handle touch* when using pointer*
   canvas.addEventListener('touchstart', event => event.preventDefault())
   canvas.addEventListener('touchmove', event => event.preventDefault())
   canvas.addEventListener('touchend', event => event.preventDefault())
   canvas.addEventListener('touchcancel', event => event.preventDefault())
 
   // capture & handle pointer events (should cover mouse & touch)
-  // note: apparently you still need to handle touch* when using pointer*
   canvas.addEventListener('pointerdown', event => {
     event.preventDefault()
     canvas.addEventListener('pointermove', this.handleEvent)
@@ -160,7 +167,7 @@ function startRendering () {
     })
   })
 
-  window.addEventListener('resize', event => {
+  window.addEventListener('resize', _ => {
     setCanvasDimensions(canvas, ctx)
   })
 
@@ -199,21 +206,16 @@ function renderLoop (canvas, ctx) {
 function handleEvent (event, drift) {
   if (event && event.preventDefault) event.preventDefault()
   const { clientX, clientY } = event || {}
-  // const change = Math.abs(clientX + clientY) > 0
   let x = 0
   let y = 0
   // let z = 0
 
   if (clientX != null && state.lastX != null) {
-    // clientX = Math.round(clientX / 20) * 20
-    // clientY = Math.round(clientY / 20) * 20
-    // console.log(clientX - lastX, clientY - lastY)
     x = (clientY - state.lastY)
     y = (state.lastX - clientX)
     state.dirX = x / 2
     state.dirY = y / 2
   } else if (drift) {
-    // console.log(dirX, dirY)
     x += state.dirX
     y += state.dirY
     // z += dirY
@@ -239,8 +241,6 @@ function keyRotate (x, y) {
   state.dirX = -x / 3
   state.dirY = -y / 3
 }
-
-// helper fns
 
 /**
  * generate random number
@@ -275,26 +275,26 @@ function controls () {
   const lightSwitch = document.querySelector('.bulb')
   const dice = document.querySelector('.dice')
   const dark = window.matchMedia('(prefers-color-scheme: dark)').matches
-  let bg = localStorage.getItem('shape-rotator-bg')
+  let bg = window.localStorage.getItem('shape-rotator-bg')
 
   if (bg) h.classList.add(bg)
 
   function toggleLight () {
-    if (bg === 'light') night()
-    else day()
+    if (bg === 'dark' || dark) day()
+    else night()
   }
 
   function day () {
     h.classList.remove('dark')
     h.classList.add('light')
-    localStorage.setItem('shape-rotator-bg', 'light')
+    window.localStorage.setItem('shape-rotator-bg', 'light')
     bg = 'light'
   }
 
   function night () {
     h.classList.remove('light')
     h.classList.add('dark')
-    localStorage.setItem('shape-rotator-bg', 'dark')
+    window.localStorage.setItem('shape-rotator-bg', 'dark')
     bg = 'dark'
   }
 
@@ -316,12 +316,12 @@ function controls () {
     if (keys.a) y = -2
     if (keys.d) y = 2
 
-    if ([x,y].some(n => n !== 0)) keyRotate(x, y)
+    if ([x, y].some(n => n !== 0)) keyRotate(x, y)
   })
 
   document.addEventListener('keyup', event => {
     delete keys[event.key]
- })
+  })
 }
 
 document.addEventListener('DOMContentLoaded', _ => {
