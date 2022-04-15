@@ -111,6 +111,7 @@
       // add ripple for pointerdown
       ctrls.forEach(el => {
         el.addEventListener('pointerdown', event => {
+          event.preventDefault()
           ripplet(event, opts())
         })
       })

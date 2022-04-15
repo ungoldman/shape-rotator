@@ -272,7 +272,7 @@ function reroll () {
 
 function controls () {
   const h = document.querySelector('html')
-  const lightSwitch = document.querySelector('.bulb')
+  const bulb = document.querySelector('.bulb')
   const dice = document.querySelector('.dice')
   const dark = window.matchMedia('(prefers-color-scheme: dark)').matches
   let bg = window.localStorage.getItem('shape-rotator-bg')
@@ -299,7 +299,7 @@ function controls () {
     bg = 'dark'
   }
 
-  lightSwitch.addEventListener('pointerdown', toggleLight)
+  bulb.addEventListener('pointerdown', toggleLight)
   dice.addEventListener('pointerdown', reroll)
 
   const keys = {}
