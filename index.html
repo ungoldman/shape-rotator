@@ -114,6 +114,10 @@
           event.preventDefault()
           ripplet(event, opts())
         })
+        // still trying to disable double tap zoom 🤬
+        el.addEventListener('touchstart', event => {
+          event.preventDefault()
+        })
       })
 
       // add ripple for keydown
