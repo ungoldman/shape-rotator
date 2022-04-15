@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
   <meta name="description" content="ROTATE SHAPES">
   <title>SHAPE ROTATOR</title>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" sizes="any">
@@ -38,22 +38,22 @@
       image-rendering: optimizeQuality;
       /* image-rendering: optimizeSpeed; */
     }
-    .dice, .bulb {
+    .bulb, .dice {
       user-select: none;
     }
     @media screen and (max-width: 50em) {
       /* mobile controls */
-      .top-bar-right .top-bar-link {
+      .bulb, .dice {
         position: fixed;
         bottom: 0;
         font-size: 30px;
         margin: 1rem;
         padding: 1rem;
       }
-      .top-bar-right .top-bar-link:last-child {
+      .bulb {
         right: 0;
       }
-      .top-bar-right .top-bar-link:first-child {
+      .dice {
         left: 0;
       }
     }
