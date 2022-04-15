@@ -14,10 +14,10 @@
       width: 100vw;
     }
     html.light {
-      background: #fff;
+      background: #f6f6f6;
     }
     html.dark {
-      background: #000;
+      background: #060606;
     }
     .top-bar {
       position: sticky;
@@ -38,23 +38,40 @@
       image-rendering: optimizeQuality;
       /* image-rendering: optimizeSpeed; */
     }
+    /* controls */
     .bulb, .dice {
       user-select: none;
+      position: fixed;
+      bottom: 0;
+      font-size: 42px;
+      margin: 1em;
+      padding: 1em;
+      opacity: 0.9;
+      text-shadow: 0 0 2px #000;
+      border-radius: 50%;
+      background: #3333;
+      border: 2px solid #4444;
+      width: 2em;
+      height: 2em;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .bulb:hover, .dice:hover {
+      background: #4444;
+      opacity: 1;
+    }
+    .bulb {
+      right: 0;
+    }
+    .dice {
+      left: 0;
     }
     @media screen and (max-width: 50em) {
-      /* mobile controls */
       .bulb, .dice {
-        position: fixed;
-        bottom: 0;
         font-size: 30px;
         margin: 1rem;
         padding: 1rem;
-      }
-      .bulb {
-        right: 0;
-      }
-      .dice {
-        left: 0;
       }
     }
   </style>
@@ -68,8 +85,8 @@
       <a href=".">🔄 shape rotator</a>
     </div>
     <div class="top-bar-right">
-      <a class="top-bar-link dice" title="reroll">🎲</a>
-      <a class="top-bar-link bulb" title="light switch">💡</a>
+      <a class="top-bar-link dice" title="reroll (q)">🎲</a>
+      <a class="top-bar-link bulb" title="light switch (e)">💡</a>
     </div>
   </nav>
   <canvas id="canvas"></canvas>

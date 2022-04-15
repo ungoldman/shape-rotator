@@ -279,8 +279,12 @@ function controls () {
 
   if (bg) h.classList.add(bg)
 
+  console.log(bg, dark)
+
+  if (!bg && dark) bg = 'dark'
+
   function toggleLight () {
-    if (bg === 'dark' || dark) day()
+    if (bg === 'dark') day()
     else night()
   }
 
