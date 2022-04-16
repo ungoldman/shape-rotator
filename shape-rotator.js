@@ -93,6 +93,10 @@ const state = {
   canvas,
   ctx,
 
+  DPR: window.devicePixelRatio || 1,
+  FPS: 60,
+
+  vertices: createVertices(),
   colors: rollColors(),
   ops: rollOps(),
 
@@ -103,17 +107,6 @@ const state = {
   dirY: -0.1
 }
 
-state.vertices = [
-  new Point3D(-1, 1, -1),
-  new Point3D(1, 1, -1),
-  new Point3D(1, -1, -1),
-  new Point3D(-1, -1, -1),
-  new Point3D(-1, 1, 1),
-  new Point3D(1, 1, 1),
-  new Point3D(1, -1, 1),
-  new Point3D(-1, -1, 1)
-]
-
 const cubeFaces = [
   [0, 1, 2, 3],
   [1, 5, 6, 2],
@@ -122,6 +115,19 @@ const cubeFaces = [
   [0, 4, 5, 1],
   [3, 2, 6, 7]
 ]
+
+function createVertices () {
+  return [
+    new Point3D(-1, 1, -1),
+    new Point3D(1, 1, -1),
+    new Point3D(1, -1, -1),
+    new Point3D(-1, -1, -1),
+    new Point3D(-1, 1, 1),
+    new Point3D(1, 1, 1),
+    new Point3D(1, -1, 1),
+    new Point3D(-1, -1, 1)
+  ]
+}
 
 function rollColors () {
   return Array(24).fill(0).map(_ => {
@@ -171,7 +177,8 @@ function startRendering () {
     setCanvasDimensions(canvas, ctx)
   })
 
-  window.shapeRotatorLoop = setInterval(() => renderLoop(canvas, ctx), 50)
+  // window.shapeRotatorLoop = setInterval(() => renderLoop(canvas, ctx), 50)
+  window.requestAnimationFrame(() => renderLoop(canvas, ctx))
 }
 
 function renderLoop (canvas, ctx) {
@@ -201,6 +208,10 @@ function renderLoop (canvas, ctx) {
     ctx.fill()
     ctx.globalCompositeOperation = 'source-over'
   })
+
+  setTimeout(() => {
+    window.requestAnimationFrame(() => renderLoop(canvas, ctx))
+  }, 1000 / state.FPS)
 }
 
 function handleEvent (event, drift) {
@@ -235,11 +246,11 @@ function handleEvent (event, drift) {
 function keyRotate (x, y) {
   state.vertices = state.vertices.map((vertex, i) => {
     return vertex
-      .rotateX(-x * 3)
-      .rotateY(-y * 3)
+      .rotateX(-x)
+      .rotateY(-y)
   })
-  state.dirX = -x / 3
-  state.dirY = -y / 3
+  state.dirX = -x / 4
+  state.dirY = -y / 4
 }
 
 /**
@@ -250,24 +261,44 @@ function keyRotate (x, y) {
 function r (n) { return Math.round(Math.random() * n) }
 
 // adapted from https://www.html5rocks.com/en/tutorials/canvas/hidpi/
-// mutates canvas & ctx, side effect on state
+// mutates canvas, ctx, side effect on state.DPR
 function setCanvasDimensions (canvas, ctx) {
   // Get the device pixel ratio, falling back to 1.
-  const DPR = window.devicePixelRatio || 1
+  state.DPR = window.devicePixelRatio || 1
   // Get the size of the canvas in CSS pixels.
   const rect = canvas.getBoundingClientRect()
   // Give the canvas pixel dimensions of their CSS
   // size * the device pixel ratio.
-  canvas.width = rect.width * DPR
-  canvas.height = rect.height * DPR
-  state.DPR = DPR
+  canvas.width = rect.width * state.DPR
+  canvas.height = rect.height * state.DPR
 
-  ctx.scale(DPR, DPR)
+  ctx.scale(state.DPR, state.DPR)
 }
 
 function reroll () {
   state.colors = rollColors()
   state.ops = rollOps()
+}
+
+function reset () {
+  state.vertices = createVertices()
+  state.dirX = 0
+  state.dirY = 0
+}
+
+let lastDir = [0, 0]
+function toggleFreeze () {
+  if (
+    state.dirX === 0 &&
+    state.dirY === 0
+  ) {
+    state.dirX = lastDir[0]
+    state.dirY = lastDir[1]
+  } else {
+    lastDir = [state.dirX, state.dirY]
+    state.dirX = 0
+    state.dirY = 0
+  }
 }
 
 function controls () {
@@ -312,10 +343,12 @@ function controls () {
 
     let x = 0
     let y = 0
-    if (keys.w) x = 2
-    if (keys.s) x = -2
-    if (keys.a) y = -2
-    if (keys.d) y = 2
+    if (keys.r) reset()
+    if (keys.f) toggleFreeze()
+    if (keys.w) x = 4
+    if (keys.s) x = -4
+    if (keys.a) y = -4
+    if (keys.d) y = 4
 
     if ([x, y].some(n => n !== 0)) keyRotate(x, y)
   })
