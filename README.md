@@ -15,8 +15,10 @@ Calm your nerves with the soothing power of [SHAPE ROTATOR](https://ungoldman.gi
 ### Keyboard
 
 - Rotate with WASD.
-- Reroll with Q.
+- Reroll cube faces with Q.
 - Toggle lights with E.
+- Reset orientation with R.
+- Freeze movement with F.
 
 ## License
 

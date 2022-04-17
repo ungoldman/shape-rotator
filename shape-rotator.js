@@ -89,6 +89,12 @@ class Point3D {
 const canvas = document.querySelector('#canvas')
 const ctx = canvas.getContext('2d')
 
+function startingDrift () {
+  return Math.random() < 0.5
+    ? 0.1
+    : -0.1
+}
+
 const state = {
   canvas,
   ctx,
@@ -103,8 +109,8 @@ const state = {
   lastX: 0,
   lastY: 0,
 
-  dirX: 0.1,
-  dirY: -0.1
+  dirX: startingDrift(),
+  dirY: startingDrift()
 }
 
 const cubeFaces = [
@@ -280,13 +286,12 @@ function reroll () {
   state.ops = rollOps()
 }
 
-function reset () {
+function resetView () {
   state.vertices = createVertices()
-  state.dirX = 0
-  state.dirY = 0
 }
 
 let lastDir = [0, 0]
+
 function toggleFreeze () {
   if (
     state.dirX === 0 &&
@@ -343,7 +348,7 @@ function controls () {
 
     let x = 0
     let y = 0
-    if (keys.r) reset()
+    if (keys.r) resetView()
     if (keys.f) toggleFreeze()
     if (keys.w) x = 4
     if (keys.s) x = -4

@@ -23,12 +23,9 @@
       background: #060606;
     }
     .top-bar {
+      display: inline-flex;
       position: sticky;
-      pointer-events: none;
       z-index: 1;
-    }
-    .top-bar > * {
-      pointer-events: auto;
     }
     #canvas {
       position: fixed;
@@ -39,7 +36,11 @@
       width: 100vw;
       height: 100vh;
       image-rendering: optimizeQuality;
-      /* image-rendering: optimizeSpeed; */
+      cursor: grab;
+    }
+    #canvas:active,
+    #canvas:focus {
+      cursor: grabbing;
     }
     /* controls */
     .bulb, .dice {
