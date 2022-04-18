@@ -100,7 +100,7 @@ const state = {
   ctx,
 
   DPR: window.devicePixelRatio || 1,
-  FPS: 60,
+  FPS: 50,
 
   vertices: createVertices(),
   colors: rollColors(),
@@ -155,10 +155,6 @@ function startRendering () {
   const { canvas, ctx } = state
   setCanvasDimensions(canvas, ctx)
 
-  this.handleEvent = handleEvent.bind(this)
-
-  this.handleEvent(null)
-
   // prevent all touch events
   // note: apparently you still need to handle touch* when using pointer*
   canvas.addEventListener('touchstart', event => event.preventDefault())
@@ -169,13 +165,13 @@ function startRendering () {
   // capture & handle pointer events (should cover mouse & touch)
   canvas.addEventListener('pointerdown', event => {
     event.preventDefault()
-    canvas.addEventListener('pointermove', this.handleEvent)
+    canvas.addEventListener('pointermove', handleEvent)
   })
 
   CANCEL_EVENTS.forEach(ce => {
     canvas.addEventListener(ce, event => {
       event.preventDefault()
-      canvas.removeEventListener('pointermove', this.handleEvent)
+      canvas.removeEventListener('pointermove', handleEvent)
     })
   })
 
@@ -190,7 +186,7 @@ function startRendering () {
 function renderLoop (canvas, ctx) {
   ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-  this.handleEvent(null, true)
+  handleEvent(null, true)
 
   const points = state.vertices.map(vertex => {
     return vertex.project(canvas.width, canvas.height, canvas.height, 6)
