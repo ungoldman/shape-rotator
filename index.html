@@ -13,9 +13,6 @@
       height: 100vh;
       width: 100vw;
     }
-    html {
-      transition: background-color 0.25s ease-in-out;
-    }
     html.light {
       background: #f6f6f6;
     }
@@ -98,7 +95,7 @@
   <a class="top-bar-link bulb" title="light switch (e)">💡</a>
   <canvas id="canvas"></canvas>
   <script src="./shape-rotator.js"></script>
-  <script defer src="https://unpkg.com/ripplet.js"></script>
+  <script src="https://unpkg.com/ripplet.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const bulb = document.querySelector('.bulb')
