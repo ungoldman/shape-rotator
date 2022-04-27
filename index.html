@@ -20,7 +20,6 @@
       background: #060606;
     }
     .top-bar {
-      display: inline-flex;
       position: sticky;
       z-index: 1;
     }
@@ -40,14 +39,14 @@
       cursor: grabbing;
     }
     /* controls */
-    .bulb, .dice {
+    .ctrl {
       user-select: none;
       position: fixed;
       z-index: 1;
       bottom: 0;
       font-size: 56px;
-      margin: 1em;
-      padding: 1em;
+      margin: 2rem;
+      padding: 2rem;
       text-shadow: 0 0 1px #000;
       border-radius: 50%;
       border: 4px solid #18e;
@@ -59,11 +58,11 @@
       -webkit-tap-highlight-color: transparent;
       touch-action: none;
     }
-    .bulb:active, .dice:active,
-    .bulb:focus, .dice:focus {
+    .ctrl:active,
+    .ctrl:focus {
       text-decoration: none;
     }
-    .bulb:hover, .dice:hover {
+    .ctrl:hover {
       border: 4px solid #1ae;
     }
     .bulb {
@@ -72,12 +71,29 @@
     .dice {
       left: 0;
     }
+    .info {
+      top: 0;
+      right: 0;
+      font-size: 24px;
+    }
+    #info-dialog > *:first-child {
+      margin-top: 0;
+    }
+    #info-dialog > *:last-child {
+      margin-bottom: 0;
+    }
+    #info-dialog-close {
+      cursor: pointer;
+    }
     @media screen and (max-width: 50em) {
-      .bulb, .dice {
+      .ctrl {
         font-size: 36px;
         border-width: 3px;
         margin: 1rem;
         padding: 1rem;
+      }
+      .info {
+        font-size: 24px;
       }
     }
   </style>
@@ -91,8 +107,36 @@
       <a href=".">🔄 shape rotator</a>
     </div>
   </nav>
-  <a class="top-bar-link dice" title="reroll (q)">🎲</a>
-  <a class="top-bar-link bulb" title="light switch (e)">💡</a>
+  <a class="top-bar-link ctrl info" title="info (i)">ℹ️</a>
+  <a class="top-bar-link ctrl dice" title="reroll (q)">🎲</a>
+  <a class="top-bar-link ctrl bulb" title="light switch (e)">💡</a>
+
+  <dialog id="info-dialog">
+    <h1>
+      <a href="https://ungoldman.github.io/shape-rotator/">SHAPE ROTATOR</a>
+      <a id="info-dialog-close" class="right">❌</a>
+    </h1>
+    <p>Life getting you down?</p>
+    <p>Calm your nerves with the soothing power of <a href="https://ungoldman.github.io/shape-rotator/">SHAPE ROTATOR</a>.</p>
+    <h2 id="controls">Controls</h2>
+    <h3 id="mouse-touch">Mouse &amp; Touch</h3>
+    <ul>
+    <li>🐁 Rotate the shape with your mouse (or finger ☝️).</li>
+    <li>🎲 Click the dice to reroll colors and composite operations.</li>
+    <li>💡 Click the light bulb to toggle between light &amp; dark modes.</li>
+    </ul>
+    <h3 id="keyboard">Keyboard</h3>
+    <ul>
+    <li>Rotate with WASD.</li>
+    <li>Reroll cube faces with Q.</li>
+    <li>Toggle lights with E.</li>
+    <li>Reset orientation with R.</li>
+    <li>Freeze movement with F.</li>
+    </ul>
+    <h2 id="license">License</h2>
+    <p>Public Domain (<a href="https://spdx.org/licenses/CC0-1.0.html">CC0-1.0</a>)</p>
+    <p>Source code is available at <a href="https://github.com/ungoldman/shape-rotator">github.com/ungoldman/shape-rotator</a>.</p>
+  </dialog>
   <canvas id="canvas"></canvas>
   <script src="./shape-rotator.js"></script>
   <script src="https://unpkg.com/ripplet.js"></script>
@@ -100,7 +144,8 @@
     document.addEventListener('DOMContentLoaded', () => {
       const bulb = document.querySelector('.bulb')
       const dice = document.querySelector('.dice')
-      const ctrls = [bulb, dice]
+      const info = document.querySelector('.info')
+      const ctrls = [bulb, dice, info]
       const opts = () => ({
         color: `rgb(${r(255)},${r(255)},${r(255)})`,
         opacity: 0.25
@@ -125,6 +170,9 @@
         }
         if (event.key === 'e') {
           ripplet({ currentTarget: bulb }, { centered: true, ...opts() })
+        }
+        if (event.key === 'i') {
+          ripplet({ currentTarget: info }, { centered: true, ...opts() })
         }
       })
     })

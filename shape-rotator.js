@@ -100,7 +100,7 @@ const state = {
   ctx,
 
   DPR: window.devicePixelRatio || 1,
-  FPS: 50,
+  FPS: 30,
 
   vertices: createVertices(),
   colors: rollColors(),
@@ -226,8 +226,8 @@ function handleEvent (event, drift) {
   if (clientX != null && state.lastX != null) {
     x = (clientY - state.lastY)
     y = (state.lastX - clientX)
-    state.dirX = x / 2
-    state.dirY = y / 2
+    state.dirX = x / 3
+    state.dirY = y / 3
   } else if (drift) {
     x += state.dirX
     y += state.dirY
@@ -306,6 +306,9 @@ function controls () {
   const h = document.querySelector('html')
   const bulb = document.querySelector('.bulb')
   const dice = document.querySelector('.dice')
+  const info = document.querySelector('.info')
+  const d = document.querySelector('#info-dialog')
+  const dc = document.querySelector('#info-dialog-close')
   const dark = window.matchMedia('(prefers-color-scheme: dark)').matches
   let bg = window.localStorage.getItem('shape-rotator-bg')
 
@@ -333,14 +336,22 @@ function controls () {
 
   bulb.addEventListener('pointerdown', toggleLight)
   dice.addEventListener('pointerdown', reroll)
+  info.addEventListener('pointerdown', toggleInfo)
+  dc.addEventListener('pointerdown', toggleInfo)
+
+  function toggleInfo () {
+    if (d.open) return d.close()
+    d.showModal()
+  }
 
   const keys = {}
 
   document.addEventListener('keydown', event => {
     keys[event.key] = true
 
-    if (event.key === 'q') reroll()
-    if (event.key === 'e') toggleLight()
+    if (event.key === 'q') return reroll()
+    if (event.key === 'e') return toggleLight()
+    if (event.key === 'i') return toggleInfo()
 
     let x = 0
     let y = 0
