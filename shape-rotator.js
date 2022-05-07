@@ -100,7 +100,7 @@ const state = {
   ctx,
 
   DPR: window.devicePixelRatio || 1,
-  FPS: 30,
+  FPS: 60,
 
   vertices: createVertices(),
   colors: rollColors(),
